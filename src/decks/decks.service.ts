@@ -11,17 +11,26 @@ export class DecksService {
     };
 
     public getNewDecks(amount: number): Deck[] {
-        let newDeck: Card[] = [];
-        this.state.suits.forEach((suit: Suit) => {
-            const completeSuit = this.generateCompleteSuit(suit);
-            newDeck = [...newDeck, ...completeSuit];
-        })
+        const newDecks = [];
 
-        return [ this.generateCompleteDeck(newDeck) ];
+        for (let i = 0; i < amount; i++) {
+
+            newDecks.push(
+                this.generateCompleteDeck(this.generateAllSuits())
+            )
+        }
+
+        return newDecks;
     }
 
     private generateCompleteSuit(suit: Suit): Card[] {
         return this.state.values.map((value: Rank) => ({ suit, value }));
+    }
+
+    private generateAllSuits() {
+        return this.state.suits.map((suit: Suit) => {
+            return this.generateCompleteSuit(suit);
+        }).flat();
     }
 
     private generateCompleteDeck(cards: Card[]): Deck {

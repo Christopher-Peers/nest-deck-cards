@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 
 import { DecksService } from './decks.service';
 import { Deck } from './interfaces/deck.interface';
@@ -11,7 +11,8 @@ export class DecksController {
     ) {}
     
     @Get('/')
-    public getDecks(amountToCreate: number): Deck[] {
-        return this.decksService.getNewDecks(1);
+    public getDecks(@Query('numberOfDecks') amountToCreate: string): Deck[] {
+        const numberOfNewDecks = Number(amountToCreate);
+        return this.decksService.getNewDecks(numberOfNewDecks);
     }
 }
