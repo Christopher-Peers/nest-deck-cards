@@ -1,7 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Param } from '@nestjs/common';
 
 import { DecksService } from './decks.service';
-import { Deck } from './interfaces/deck.interface';
+import { Deck, FindDeckParams } from './interfaces/deck.interface';
 
 @Controller('decks')
 export class DecksController {
@@ -14,5 +14,11 @@ export class DecksController {
     public getDecks(@Query('numberOfDecks') amountToCreate: string): Deck[] {
         const numberOfNewDecks = Number(amountToCreate);
         return this.decksService.getNewDecks(numberOfNewDecks);
+    }
+
+    @Get('/:id')
+    public getSpecificDeck(@Param() params: FindDeckParams): Deck {
+        const deckId = Number(params.id);
+        return this.decksService.getSpecificDeck(deckId);
     }
 }

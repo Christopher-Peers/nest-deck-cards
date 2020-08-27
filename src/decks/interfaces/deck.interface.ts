@@ -1,5 +1,5 @@
 export interface Deck {
-    id: string;
+    id: number;
     cards: Card[];
     cardsLeftInDeck: number;
     hasBeenShuffled: boolean;
@@ -13,3 +13,7 @@ export interface Card {
 
 export type Suit =  "HEARTS" | "DIAMONDS" | "CLUBS" | "SPADES";
 export type Rank = number | "J" | "Q" | "K";
+
+export interface FindDeckParams {
+    id: number;
+}
