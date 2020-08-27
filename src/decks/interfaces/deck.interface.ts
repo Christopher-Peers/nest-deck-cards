@@ -14,6 +14,11 @@ export interface Card {
 export type Suit =  "HEARTS" | "DIAMONDS" | "CLUBS" | "SPADES";
 export type Rank = number | "J" | "Q" | "K";
 
+export interface DeckServiceState {
+    currentDecks: Deck[];
+    
+}
+
 export interface FindDeckParams {
     id: number;
 }

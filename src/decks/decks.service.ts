@@ -5,22 +5,25 @@ import { Deck, Suit, Rank, Card } from './interfaces/deck.interface';
 @Injectable()
 export class DecksService {
 
-    private readonly state = {
+    private state = {
         values: [1, 2, 3, 4, 5, 6, 7, 8, 9, "J", "Q", "K"],
-        suits: ["HEARTS", "DIAMONDS", "CLUBS", "SPADES"]
+        suits: ["HEARTS", "DIAMONDS", "CLUBS", "SPADES"],
+        currentDecks: []
     };
 
-    public getNewDecks(amount: number): Deck[] {
-        const newDecks = [];
+    public getNewDecks(amount: number = 1): Deck[] {
+        const newDeckRefs = [];
 
         for (let i = 0; i < amount; i++) {
-
-            newDecks.push(
-                this.generateCompleteDeck(this.generateAllSuits())
-            )
+            const newDeckRef = this.generateCompleteDeck()
+            this.state.currentDecks.push(newDeckRef)
+            newDeckRefs.push(newDeckRef)
         }
+        return newDeckRefs;
+    }
 
-        return newDecks;
+    public getSpecificDeck(id: number): Deck {
+        return this.findDeck(id);
     }
 
     private generateCompleteSuit(suit: Suit): Card[] {
@@ -33,14 +36,19 @@ export class DecksService {
         }).flat();
     }
 
-    private generateCompleteDeck(cards: Card[]): Deck {
+    private generateCompleteDeck(): Deck {
         return {
-            id: new Date().toISOString(),
-            cards,
+            id: Math.round(Math.random() * 100),
+            cards: this.generateAllSuits(),
             cardsLeftInDeck: 52,
             hasBeenShuffled: false,
             timeLastShuffled: null
         }
     }
 
+    private findDeck(id: number): Deck {
+        return this.state.currentDecks.find((deck: Deck) => deck.id === id);
+    }
+
 }
+
