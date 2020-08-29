@@ -11,7 +11,7 @@ export class DecksService {
         currentDecks: []
     };
 
-    public getNewDecks(amount: number = 1): Deck[] {
+    public getNewDecks(amount: number): Deck[] {
         const newDeckRefs = [];
 
         for (let i = 0; i < amount; i++) {
