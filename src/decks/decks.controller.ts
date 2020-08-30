@@ -1,7 +1,7 @@
 import { Controller, Get, Query, Param } from '@nestjs/common';
 
 import { DecksService } from './decks.service';
-import { Deck, FindDeckParams } from './interfaces/deck.interface';
+import { Deck, GetDeckParams } from './interfaces/deck.interface';
 
 @Controller('decks')
 export class DecksController {
@@ -10,14 +10,19 @@ export class DecksController {
         private decksService: DecksService
     ) {}
     
-    @Get('/')
-    public getDecks(@Query('numberOfDecks') amountToCreate: string): Deck[] {
+    @Get('/create')
+    public createDecks(@Query('numberOfDecks') amountToCreate: string): Deck[] {
         const numberOfNewDecks = Number(amountToCreate);
         return this.decksService.getNewDecks(numberOfNewDecks);
     }
 
     @Get('/:id')
-    public getSpecificDeck(@Param() params: FindDeckParams): Deck {
+    public getSpecificDeck(@Param() params: GetDeckParams): Deck {
         return this.decksService.getSpecificDeck(params.id);
+    }
+
+    @Get('/:id/shuffle')
+    public getShuffledDeck(@Param() params: GetDeckParams): Deck {
+        return this.decksService.shuffleDeck(params.id)
     }
 }

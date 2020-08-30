@@ -10,7 +10,9 @@ export class DecksService {
     private state = {
         values: ["A", 2, 3, 4, 5, 6, 7, 8, 9, "J", "Q", "K"],
         suits: ["HEARTS", "DIAMONDS", "CLUBS", "SPADES"],
-        currentDecks: []
+        currentDecks: [],
+        players: {},
+        piles: {}
     };
 
     public getNewDecks(amount: number): Deck[] {
@@ -28,32 +30,52 @@ export class DecksService {
         return this.findDeck(id);
     }
 
-    private generateCompleteSuit(suit: Suit): Card[] {
+    private generateCompleteSuit(suit: Suit, deckId: string): Card[] {
         return this.state.values.map((value: Rank) => ({
             suit,
             value,
-            id: nanoid()
+            id: nanoid(),
+            deckId
         }));
     }
 
-    private generateAllSuits() {
+    private generateAllSuits(deckId: string) {
         return this.state.suits.map((suit: Suit) => {
-            return this.generateCompleteSuit(suit);
+            return this.generateCompleteSuit(suit, deckId);
         }).flat();
     }
 
     private generateCompleteDeck(): Deck {
-        return {
-            id: nanoid(),
-            cards: this.generateAllSuits(),
-            cardsLeftInDeck: 52,
+        const deckId = nanoid();
+        const newDeck = {
+            id: deckId,
+            cards: this.generateAllSuits(deckId),
+            cardsLeftInDeck: 48,
             hasBeenShuffled: false,
             timeLastShuffled: null
         }
+        return newDeck;
     }
 
     private findDeck(id: string): Deck {
         return this.state.currentDecks.find((deck: Deck) => deck.id === id);
+    }
+
+    public shuffleDeck(id: string): Deck {
+        const specificDeck = this.findDeck(id);
+        let shuffledCards: Card[] = [];
+
+        for (let i = 0; i < 48; i ++) {
+            const cardIndex = Math.floor(Math.random() * specificDeck.cards.length);
+            const splicedCard: Card[] = specificDeck.cards.splice(cardIndex, 1)
+            shuffledCards = [...shuffledCards, ...splicedCard];
+        }
+
+        specificDeck.cards = shuffledCards;
+        specificDeck.hasBeenShuffled = true;
+        specificDeck.timeLastShuffled = new Date().toISOString();
+        console.log(specificDeck)
+        return specificDeck;
     }
 
 }
