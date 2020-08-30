@@ -18,7 +18,6 @@ export class DecksController {
 
     @Get('/:id')
     public getSpecificDeck(@Param() params: FindDeckParams): Deck {
-        const deckId = Number(params.id);
-        return this.decksService.getSpecificDeck(deckId);
+        return this.decksService.getSpecificDeck(params.id);
     }
 }

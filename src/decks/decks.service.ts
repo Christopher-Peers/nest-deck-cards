@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
+import { nanoid } from 'nanoid';
+
 import { Deck, Suit, Rank, Card } from './interfaces/deck.interface';
 
 @Injectable()
 export class DecksService {
 
     private state = {
-        values: [1, 2, 3, 4, 5, 6, 7, 8, 9, "J", "Q", "K"],
+        values: ["A", 2, 3, 4, 5, 6, 7, 8, 9, "J", "Q", "K"],
         suits: ["HEARTS", "DIAMONDS", "CLUBS", "SPADES"],
         currentDecks: []
     };
@@ -22,12 +24,16 @@ export class DecksService {
         return newDeckRefs;
     }
 
-    public getSpecificDeck(id: number): Deck {
+    public getSpecificDeck(id: string): Deck {
         return this.findDeck(id);
     }
 
     private generateCompleteSuit(suit: Suit): Card[] {
-        return this.state.values.map((value: Rank) => ({ suit, value }));
+        return this.state.values.map((value: Rank) => ({
+            suit,
+            value,
+            id: nanoid()
+        }));
     }
 
     private generateAllSuits() {
@@ -38,7 +44,7 @@ export class DecksService {
 
     private generateCompleteDeck(): Deck {
         return {
-            id: Math.round(Math.random() * 100),
+            id: nanoid(),
             cards: this.generateAllSuits(),
             cardsLeftInDeck: 52,
             hasBeenShuffled: false,
@@ -46,7 +52,7 @@ export class DecksService {
         }
     }
 
-    private findDeck(id: number): Deck {
+    private findDeck(id: string): Deck {
         return this.state.currentDecks.find((deck: Deck) => deck.id === id);
     }
 
