@@ -10,9 +10,9 @@ export class CardsController {
         private cardsService: CardsService
     ) {}
     
-    @Get('/')
-    public getTopCardFromPack(@Query('deckId') deckId: string): Card {
-        return this.cardsService.getTopCard(deckId);
-    }
+    // @Get('/')
+    // public getTopCardFromPack(@Query('deckId') deckId: string): Card {
+    //     return this.cardsService.getTopCard(deckId);
+    // }
 
 }
